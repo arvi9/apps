@@ -54,22 +54,27 @@ module.exports = withTM(
               fullySpecified: false,
             },
           });
-          config.resolve.alias = {
-            ...config.resolve.alias,
-            // Required to remove duplicate dependencies from the build
-            ...Object.keys(sharedPackage.peerDependencies).reduce(
-              (acc, dep) => {
-                if (['react', 'react-dom'].find((name) => name === dep)) {
+          if(!dev && !isServer) {
+            config.resolve.alias = {
+              ...config.resolve.alias,
+              // Required to remove duplicate dependencies from the build
+              ...Object.keys(sharedPackage.peerDependencies).reduce(
+                (acc, dep) => {
+                  if (['react', 'react-dom'].find((name) => name === dep)) {
+                    return {
+                      ...acc,
+                      [dep]: path.resolve('./node_modules/preact/compat'),
+                    };
+                  }
                   return {
                     ...acc,
-                    [dep]: path.resolve('./node_modules/preact/compat'),
+                    [dep]: path.resolve(`./node_modules/${dep}`)
                   };
-                }
-                return { ...acc, [dep]: path.resolve(`./node_modules/${dep}`) };
-              },
-              {},
-            ),
-          };
+                },
+                {},
+              ),
+            };
+          }
 
           return config;
         },
