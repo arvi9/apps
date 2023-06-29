@@ -1,6 +1,6 @@
 function switchToPreact(pkg, dep) {
   if (pkg.dependencies[dep]) {
-    pkg.dependencies[dep] = 'npm:@preact/compat@17.0.2';
+    pkg.dependencies[dep] = 'npm:@preact/compat@17.1.2';
   }
 }
 
