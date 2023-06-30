@@ -81,10 +81,10 @@ module.exports = {
         path.join(__dirname, 'node_modules', 'webextension-polyfill-ts'),
       ),
       react: path.resolve(
-        path.join(__dirname, 'node_modules', 'preact', 'compat'),
+        path.join(__dirname, 'node_modules', '@preact', 'compat'),
       ),
       'react-dom': path.resolve(
-        path.join(__dirname, 'node_modules', 'preact', 'compat'),
+        path.join(__dirname, 'node_modules', '@preact', 'compat'),
       ),
     },
   },

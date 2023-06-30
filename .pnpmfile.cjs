@@ -6,8 +6,14 @@ function switchToPreact(pkg, dep) {
 
 function readPackage(pkg) {
   if (pkg.dependencies) {
-    switchToPreact(pkg, 'react');
-    switchToPreact(pkg, 'react-dom');
+    // if(pkg.dependencies.react) {
+    //   pkg.dependencies.react = 'npm:local-react';
+    // }
+    // if(pkg.dependencies['react-dom']) {
+    //   pkg.dependencies['react-dom'] = 'npm:local-react-dom';
+    // }
+    // switchToPreact(pkg, 'react');
+    // switchToPreact(pkg, 'react-dom');
   }
   return pkg
 }

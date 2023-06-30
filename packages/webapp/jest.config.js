@@ -31,7 +31,7 @@ module.exports = {
                     if (['react', 'react-dom'].find((name) => name === dep)) {
                       return {
                         ...acc,
-                        [dep]: path.resolve('./node_modules/preact/compat'),
+                        [dep]: path.resolve('./node_modules/@preact/compat'),
                       };
                     }
                     return {
