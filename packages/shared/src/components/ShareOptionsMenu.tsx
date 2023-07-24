@@ -51,7 +51,6 @@ export default function ShareOptionsMenu({
   const link = post && post?.commentsPermalink;
   const [, copyLink] = useCopyPostLink(link);
   const { squads } = useContext(AuthContext);
-  const { hasSquadAccess } = useContext(FeaturesContext);
   const { trackEvent } = useContext(AnalyticsContext);
   const { openModal } = useLazyModal();
   const { openNewSquad } = useSquadNavigation();
@@ -90,7 +89,7 @@ export default function ShareOptionsMenu({
     },
   ];
 
-  if (hasSquadAccess && !post?.private) {
+  if (!post?.private) {
     if (!squads?.length) {
       shareOptions.push({
         icon: <MenuIcon Icon={SquadIcon} />,

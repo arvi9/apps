@@ -57,10 +57,9 @@ export default function Sidebar({
     optOutWeeklyGoal,
   } = useContext(SettingsContext);
   const [showSettings, setShowSettings] = useState(false);
-  const { hasSquadAccess, canSubmitArticle } = useContext(FeaturesContext);
+  const { canSubmitArticle } = useContext(FeaturesContext);
   const { openNewSquad } = useSquadNavigation();
-  const newSquadButtonVisible =
-    sidebarRendered && hasSquadAccess && !squads?.length;
+  const newSquadButtonVisible = sidebarRendered && !squads?.length;
 
   const feedName = getFeedName(activePageProp, {
     hasUser: !!user,
@@ -139,14 +138,12 @@ export default function Sidebar({
                 icon={<ProfilePicture size="xsmall" user={user} />}
               />
             )}
-            {!!squads?.length && (
-              <SquadsList
-                {...defaultRenderSectionProps}
-                activePage={activePageProp}
-                squads={squads}
-                onNewSquad={() => openNewSquad({ origin: Origin.Sidebar })}
-              />
-            )}
+            <SquadsList
+              {...defaultRenderSectionProps}
+              activePage={activePageProp}
+              squads={squads}
+              onNewSquad={() => openNewSquad({ origin: Origin.Sidebar })}
+            />
             <DiscoverSection
               {...defaultRenderSectionProps}
               onNavTabClick={onNavTabClick}
