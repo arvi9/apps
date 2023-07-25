@@ -205,7 +205,6 @@ export const BootDataProvider = ({
           visit={bootRemoteData?.visit}
           refetchBoot={refetch}
           isFetched={isFetched}
-          isLegacyLogout={bootRemoteData?.isLegacyLogout}
           firstLoad={initialLoad}
           accessToken={bootRemoteData?.accessToken}
           squads={squads}

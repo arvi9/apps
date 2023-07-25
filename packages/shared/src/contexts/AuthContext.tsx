@@ -91,7 +91,6 @@ const logout = async (): Promise<void> => {
 export type AuthContextProviderProps = {
   user: LoggedUser | AnonymousUser | undefined;
   isFetched?: boolean;
-  isLegacyLogout?: boolean;
   firstLoad?: boolean;
   refetchBoot?: () => Promise<QueryObserverResult<Boot>>;
   children?: ReactNode;
@@ -118,7 +117,6 @@ export const AuthContextProvider = ({
   getRedirectUri,
   refetchBoot,
   visit,
-  isLegacyLogout,
   firstLoad,
   accessToken,
   squads,
@@ -130,10 +128,6 @@ export const AuthContextProvider = ({
 
   if (firstLoad === true && endUser && !endUser?.infoConfirmed) {
     logout();
-  }
-
-  if (isLegacyLogout && !loginState) {
-    setLoginState({ trigger: AuthTriggers.LegacyLogout });
   }
 
   const authContext: AuthContextData = useMemo(

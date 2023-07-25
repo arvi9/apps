@@ -54,7 +54,6 @@ export type Boot = {
   settings: RemoteSettings;
   squads: Squad[];
   postData?: PostBootData;
-  isLegacyLogout?: boolean;
   exp?: { f: string; e: string[] };
 };
 
