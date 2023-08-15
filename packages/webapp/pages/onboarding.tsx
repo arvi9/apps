@@ -17,15 +17,13 @@ import { AuthTriggers } from '@dailydotdev/shared/src/lib/auth';
 import { FilterOnboarding } from '@dailydotdev/shared/src/components/onboarding';
 import { Button } from '@dailydotdev/shared/src/components/buttons/Button';
 import { MemberAlready } from '@dailydotdev/shared/src/components/onboarding/MemberAlready';
-import {
-  OnboardingFilteringTitle,
-  OnboardingV2,
-} from '@dailydotdev/shared/src/lib/featureValues';
+import { OnboardingFilteringTitle } from '@dailydotdev/shared/src/lib/featureValues';
 import classed from '@dailydotdev/shared/src/lib/classed';
 import { useRouter } from 'next/router';
 import { useAnalyticsContext } from '@dailydotdev/shared/src/contexts/AnalyticsContext';
 import {
   AnalyticsEvent,
+  Origin,
   TargetType,
 } from '@dailydotdev/shared/src/lib/analytics';
 import { OnboardingStep } from '@dailydotdev/shared/src/components/onboarding/common';
@@ -80,8 +78,7 @@ export function OnboardPage(): ReactElement {
   });
   const { isAuthenticating, isLoginFlow } = auth;
   const { onShouldUpdateFilters } = useOnboardingContext();
-  const { onboardingV2, onboardingFilteringTitle, isFeaturesLoaded } =
-    useFeaturesContext();
+  const { onboardingFilteringTitle, isFeaturesLoaded } = useFeaturesContext();
   const { onboardingIntroduction } = useThemedAsset();
   const { trackEvent } = useAnalyticsContext();
   const { alerts } = useContext(AlertContext);
@@ -130,7 +127,7 @@ export function OnboardPage(): ReactElement {
   useEffect(() => {
     if (!isPageReady || isTracked.current) return;
 
-    if (user || onboardingV2 === OnboardingV2.Control) {
+    if (user) {
       router.push('/');
       return;
     }
@@ -138,7 +135,7 @@ export function OnboardPage(): ReactElement {
     trackEvent({
       event_name: AnalyticsEvent.Impression,
       target_type: TargetType.MyFeedModal,
-      target_id: onboardingV2,
+      target_id: Origin.Onboarding,
       extra: JSON.stringify({
         origin: OnboardingMode.Wall,
         steps: [OnboardingStep.Topics],
@@ -146,7 +143,7 @@ export function OnboardPage(): ReactElement {
       }),
     });
     isTracked.current = true;
-  }, [trackEvent, isPageReady, onboardingV2, router, user]);
+  }, [trackEvent, isPageReady, router, user]);
 
   useEffect(() => {
     updateCookieBanner(user);

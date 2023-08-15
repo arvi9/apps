@@ -20,8 +20,7 @@ import AlertContext from './AlertContext';
 import AnalyticsContext from './AnalyticsContext';
 import { isTesting } from '../lib/constants';
 import useSidebarRendered from '../hooks/useSidebarRendered';
-import { ExperimentWinner, OnboardingV2 } from '../lib/featureValues';
-import { useFeaturesContext } from './FeaturesContext';
+import { ExperimentWinner } from '../lib/featureValues';
 
 const OnboardingModal = dynamic(
   () =>
@@ -58,7 +57,6 @@ export const OnboardingContextProvider = ({
   const { trackEvent } = useContext(AnalyticsContext);
   const { registerLocalFilters } = useMyFeed();
   const [isOnboarding, setIsOnboarding] = useState(false);
-  const { onboardingV2 } = useFeaturesContext();
   const [isRegisteringFilters, setIsRegisteringFilters] = useState(false);
   const [shouldUpdateFilters, setShouldUpdateFilters] = useState(false);
   const [onboardingMode, setOnboardingMode] = useState(OnboardingMode.Manual);
@@ -82,8 +80,7 @@ export const OnboardingContextProvider = ({
     setIsOnboarding(true);
   };
   const { sidebarRendered } = useSidebarRendered();
-  const showArticleOnboarding =
-    sidebarRendered && alerts?.filter && onboardingV2 === OnboardingV2.Control;
+  const showArticleOnboarding = sidebarRendered && alerts?.filter;
   const onStartArticleOnboarding = () => {
     trackEvent({
       event_name: AnalyticsEvent.ClickArticleAnonymousCTA,
@@ -118,7 +115,6 @@ export const OnboardingContextProvider = ({
       hasTriedOnboarding,
       !alerts.filter,
       !isHome,
-      onboardingV2 !== OnboardingV2.Control,
     ];
 
     if (conditions.some((condition) => !!condition)) {
@@ -136,7 +132,6 @@ export const OnboardingContextProvider = ({
     user,
     pathname,
     loadedAlerts,
-    onboardingV2,
   ]);
 
   const onCloseOnboardingModal = () => {

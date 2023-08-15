@@ -5,14 +5,13 @@ import {
   getFeatureValue,
   isFeaturedEnabled,
 } from '../lib/featureManagement';
-import { OnboardingFilteringTitle, OnboardingV2 } from '../lib/featureValues';
+import { OnboardingFilteringTitle } from '../lib/featureValues';
 import { getCookieFeatureFlags, updateFeatureFlags } from '../lib/cookie';
 import { isPreviewDeployment } from '../lib/links';
 
 interface Experiments {
   canSubmitArticle?: boolean;
   showHiring?: boolean;
-  onboardingV2?: OnboardingV2;
   onboardingFilteringTitle?: OnboardingFilteringTitle;
 }
 
@@ -38,7 +37,6 @@ const getFeatures = (flags: IFlags): FeaturesData => {
       Features.OnboardingFilteringTitle,
       flags,
     ),
-    onboardingV2: getFeatureValue(Features.OnboardingV2, flags),
     showHiring: isFeaturedEnabled(Features.ShowHiring, flags),
   };
 };

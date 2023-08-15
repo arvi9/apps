@@ -1,17 +1,15 @@
 import dynamic from 'next/dynamic';
-import React, { ReactElement, ReactNode, useContext } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { Post } from '../../graphql/posts';
 import PostNavigation, {
   PostNavigationClassName,
   PostNavigationProps,
 } from './PostNavigation';
-import { PostFeedFiltersOnboarding } from './PostFeedFiltersOnboarding';
 import PostEngagements from './PostEngagements';
 import {
   UsePostContent,
   UsePostContentProps,
 } from '../../hooks/usePostContent';
-import OnboardingContext from '../../contexts/OnboardingContext';
 
 const ShareModal = dynamic(
   () => import(/* webpackChunkName: "shareModal" */ '../modals/ShareModal'),
@@ -62,19 +60,9 @@ export function BasePostContent({
 
   const { onCloseShare, sharePost, onSharePost, onToggleBookmark } =
     engagementProps;
-  const { onStartArticleOnboarding, showArticleOnboarding } =
-    // @NOTE see https://dailydotdev.atlassian.net/l/cp/dK9h1zoM
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useContext(OnboardingContext);
 
   return (
     <>
-      {showArticleOnboarding && (
-        <PostFeedFiltersOnboarding
-          className={className?.onboarding}
-          onInitializeOnboarding={onStartArticleOnboarding}
-        />
-      )}
       {customNavigation ?? (
         <PostNavigation {...navigationProps} className={className.navigation} />
       )}

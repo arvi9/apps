@@ -25,14 +25,9 @@ import {
 import PostOptionsMenu from './PostOptionsMenu';
 import { usePostModalNavigation } from '../hooks/usePostModalNavigation';
 import { useSharePost } from '../hooks/useSharePost';
-import { AnalyticsEvent, Origin } from '../lib/analytics';
+import { Origin } from '../lib/analytics';
 import ShareOptionsMenu from './ShareOptionsMenu';
-import { ExperimentWinner, OnboardingV2 } from '../lib/featureValues';
-import { useFeaturesContext } from '../contexts/FeaturesContext';
-import useSidebarRendered from '../hooks/useSidebarRendered';
-import OnboardingContext from '../contexts/OnboardingContext';
-import AlertContext from '../contexts/AlertContext';
-import { MainFeedPage } from './utilities';
+import { ExperimentWinner } from '../lib/featureValues';
 import { FeedContainer } from './feeds';
 
 export interface FeedProps<T>
@@ -67,13 +62,6 @@ const SharePostModal = dynamic(
     import(/* webpackChunkName: "sharePostModal" */ './modals/SharePostModal'),
 );
 
-const ScrollFeedFiltersOnboarding = dynamic(
-  () =>
-    import(
-      /* webpackChunkName: "scrollFeedFiltersOnboarding" */ './ScrollFeedFiltersOnboarding'
-    ),
-);
-
 const calculateRow = (index: number, numCards: number): number =>
   Math.floor(index / numCards);
 const calculateColumn = (index: number, numCards: number): number =>
@@ -99,13 +87,9 @@ export default function Feed<T>({
   options,
   allowPin,
 }: FeedProps<T>): ReactElement {
-  const { alerts } = useContext(AlertContext);
-  const { onInitializeOnboarding } = useContext(OnboardingContext);
   const { trackEvent } = useContext(AnalyticsContext);
   const currentSettings = useContext(FeedContext);
   const { user } = useContext(AuthContext);
-  const { sidebarRendered } = useSidebarRendered();
-  const { onboardingV2 } = useFeaturesContext();
   const {
     openNewTab,
     spaciness,
@@ -149,26 +133,10 @@ export default function Feed<T>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emptyFeed]);
 
-  const showScrollOnboardingVersion =
-    sidebarRendered &&
-    feedName === MainFeedPage.Popular &&
-    !isLoading &&
-    alerts?.filter &&
-    !user?.id &&
-    onboardingV2 === OnboardingV2.Control;
-
   const infiniteScrollRef = useFeedInfiniteScroll({
     fetchPage,
-    canFetchMore: canFetchMore && !showScrollOnboardingVersion,
+    canFetchMore,
   });
-
-  const onInitializeOnboardingClick = () => {
-    trackEvent({
-      event_name: AnalyticsEvent.ClickScrollBlock,
-      target_id: ExperimentWinner.ScrollOnboardingVersion,
-    });
-    onInitializeOnboarding(undefined, true);
-  };
 
   const useList = insaneMode && numCards > 1;
   const virtualizedNumCards = useList ? 1 : numCards;
@@ -366,13 +334,6 @@ export default function Feed<T>({
       forceCardMode={forceCardMode}
       header={header}
       className={className}
-      afterFeed={
-        showScrollOnboardingVersion ? (
-          <ScrollFeedFiltersOnboarding
-            onInitializeOnboarding={onInitializeOnboardingClick}
-          />
-        ) : null
-      }
     >
       {items.map((item, index) => (
         <FeedItemComponent
